@@ -2,9 +2,8 @@ package Dist::Zilla::Plugin::InlineModule;
 our $VERSION = '0.01';
 
 use Moose;
-with 'Dist::Zilla::Role::AfterBuild';
-
 extends 'Dist::Zilla::Plugin::MakeMaker::Awesome';
+with 'Dist::Zilla::Role::AfterBuild';
 
 has module => (
     isa => 'ArrayRef[Str]',
@@ -13,12 +12,11 @@ has module => (
     required => 1,
 );
 
-# lets us pass the 'module' option more than once
-
+# Lets us pass the 'module' option more than once:
 sub mvp_multivalue_args { qw(module) }
 
-# add our FixMakefile call to Makefile.PL, respecting any other
-# footer lines that were provided in dist.ini
+# Add our FixMakefile call to Makefile.PL, respecting any other footer lines
+# that were provided in dist.ini:
 around _build_footer => sub {
     my $orig = shift;
     my $self = shift;
