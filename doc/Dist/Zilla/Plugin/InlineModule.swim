@@ -7,7 +7,7 @@ Dist::Zilla Plugin for Inline::Module
 
 = Synopsis
 
-  [@InlineModule]
+  [InlineModule]
   module = My::Simple::XS::Module
   stub = My::Simple::XS::Module::Inline
   ilsm = Inline::C
