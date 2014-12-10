@@ -33,6 +33,17 @@ has ilsm => (
 # Lets us pass the 'module' option more than once:
 sub mvp_multivalue_args { qw(module stub ilsm) }
 
+# Add list of modules to the postamble arguments.
+around _build_WriteMakefile_args => sub {
+    my $orig = shift;
+    my $self = shift;
+
+    my $make_args = $self->$orig(@_);
+    $make_args->{postamble}{inline}{module} = $self->module;
+
+    return $make_args;
+};
+
 sub after_build {
     my ($self, $hash) = @_;
     require Inline::Module;
