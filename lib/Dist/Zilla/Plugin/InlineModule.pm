@@ -15,19 +15,15 @@ has module => (
 # Lets us pass the 'module' option more than once:
 sub mvp_multivalue_args { qw(module) }
 
-# Add our FixMakefile call to Makefile.PL, respecting any other footer lines
-# that were provided in dist.ini:
-around _build_footer => sub {
+# Add list of modules to the postamble arguments.
+around _build_WriteMakefile_args => sub {
     my $orig = shift;
     my $self = shift;
 
-    return join "\n",
-        "use lib 'inc'; use Inline::Module::MakeMaker;",
-        'Inline::Module::MakeMaker::FixMakefile(',
-        (map { "  module => '" . $_ . "'," } $self->modules),
-        ');',
-        '',
-        $self->$orig(@_);
+    my $make_args = $self->$orig(@_);
+    $make_args->{postamble}{inline}{module} = [ $self->modules ];
+
+    return $make_args;
 };
 
 sub after_build {
@@ -44,7 +40,6 @@ sub after_build {
         'Inline::C',
         'Inline::C::Parser::RegExp',
         'Inline::Module',
-        'Inline::Module::MakeMaker',
     );
     Inline::Module->handle_distdir;
 }
