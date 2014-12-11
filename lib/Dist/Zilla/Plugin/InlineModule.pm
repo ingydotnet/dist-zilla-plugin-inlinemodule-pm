@@ -40,7 +40,6 @@ sub after_build {
         'Inline::C',
         'Inline::C::Parser::RegExp',
         'Inline::Module',
-        'Inline::Module::MakeMaker',
     );
     Inline::Module->handle_distdir;
 }
