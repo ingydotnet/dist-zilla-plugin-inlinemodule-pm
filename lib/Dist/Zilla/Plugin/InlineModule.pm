@@ -3,7 +3,7 @@ our $VERSION = '0.01';
 
 use Moose;
 extends 'Dist::Zilla::Plugin::MakeMaker::Awesome';
-with 'Dist::Zilla::Role::AfterBuild';
+with qw(Dist::Zilla::Role::AfterBuild Dist::Zilla::Role::FileGatherer);
 
 has module => (
     isa => 'ArrayRef[Str]',
@@ -46,6 +46,24 @@ sub after_build {
         'Inline::Module',
         'Inline::Module::MakeMaker',
     );
+
+    # the following will make sure that Dist::Zilla know about the written
+    # files so that it can add them to the tarball.
+    my $old_write_module = \&Inline::Module::write_module;
+    local *Inline::Module::write_module = sub {
+        my $filepath = $old_write_module->(@_);
+
+        # need to get the dist dir off the front for dzil
+        my $dzil_filepath = $filepath;
+        $dzil_filepath =~ s!^[^/]*/!!;
+
+        my $file = Dist::Zilla::File::OnDisk->new(
+            name => $dzil_filepath,
+        );
+        $self->add_file( $file );
+
+        return $filepath;
+    };
     Inline::Module->handle_distdir;
 }
 
