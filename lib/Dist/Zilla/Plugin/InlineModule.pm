@@ -40,6 +40,7 @@ around _build_WriteMakefile_args => sub {
 
     my $make_args = $self->$orig(@_);
     $make_args->{postamble}{inline}{module} = $self->module;
+    # XXX need to support ilsm and stub here.
 
     return $make_args;
 };
