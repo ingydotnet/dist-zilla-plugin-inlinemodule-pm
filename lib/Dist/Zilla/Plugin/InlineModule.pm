@@ -37,6 +37,16 @@ sub _build_stub {
 # Lets us pass the 'module' option more than once:
 sub mvp_multivalue_args { qw(module stub ilsm) }
 
+# Add lines to use Inline::Module to Makefile.PL
+around _build_header => sub {
+    return <<'...';
+
+use lib 'inc';
+use Inline::Module;
+
+...
+};
+
 # Add list of modules to the postamble arguments.
 around _build_WriteMakefile_args => sub {
     my $orig = shift;
