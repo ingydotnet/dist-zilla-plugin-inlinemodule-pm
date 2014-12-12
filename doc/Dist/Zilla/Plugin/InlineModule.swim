@@ -9,10 +9,30 @@ Dist::Zilla Plugin for Inline::Module
 
   [@InlineModule]
   module = My::Simple::XS::Module
+  stub = My::Simple::XS::Module::Inline
+  ilsm = Inline::C
 
 = Description
 
 This module provides support for [Inline::Module] in [Dist::Zilla].
+
+= Keywords
+
+- `module`
+
+  A module in `lib` that uses [Inline] code. You can specify this keyword
+  multiple times.
+
+- `stub`
+
+  An Inline::Module /stub/ module. You can specify this keyword multiple
+  times. The default is to append `::Inline` to each `module` keyword.
+
+- `ilsm`
+
+  The ILSM(s) (Inline Language Support Module) you are using. You can specify
+  this keyword multiple times. The default [Inline::C]. [Inline::CPP] is the
+  other most common value.
 
 = Authors
 
