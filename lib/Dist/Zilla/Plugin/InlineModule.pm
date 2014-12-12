@@ -1,8 +1,6 @@
 package Dist::Zilla::Plugin::InlineModule;
 our $VERSION = '0.01';
 
-use XXX;
-
 use Moose;
 extends 'Dist::Zilla::Plugin::MakeMaker::Awesome';
 with 'Dist::Zilla::Role::AfterBuild';
@@ -16,10 +14,11 @@ has module => (
 
 has stub => (
     is => 'ro',
+    lazy => 1,
+    builder => '_build_stub',
     isa => 'ArrayRef[Str]',
     traits => ['Array'],
     required => 0,
-    default => sub { [] },
 );
 
 has ilsm => (
@@ -30,6 +29,11 @@ has ilsm => (
     default => sub { ['Inline::C'] },
 );
 
+sub _build_stub {
+    my ($self) = @_;
+    return [ map "${_}::Inline", @{$self->module} ];
+}
+
 # Lets us pass the 'module' option more than once:
 sub mvp_multivalue_args { qw(module stub ilsm) }
 
@@ -39,8 +43,11 @@ around _build_WriteMakefile_args => sub {
     my $self = shift;
 
     my $make_args = $self->$orig(@_);
-    $make_args->{postamble}{inline}{module} = $self->module;
-    # XXX need to support ilsm and stub here.
+    $make_args->{postamble}{inline} = {
+        module => $self->module,
+        stub => $self->stub,
+        ilsm => $self->ilsm,
+    };
 
     return $make_args;
 };
@@ -49,19 +56,11 @@ sub after_build {
     my ($self, $hash) = @_;
     require Inline::Module;
 
-    my $inline_module = Inline::Module->new(
-        ilsm => $self->ilsm,
-    );
-    my $build_dir = $hash->{build_root}->stringify;
-    my @stub_modules = @{$self->stub}
-    ? @{$self->stub}
-    : map "${_}::Inline", @{$self->module};
-    my @included_modules = $inline_module->included_modules;
     Inline::Module->handle_distdir(
-        $build_dir,
-        @stub_modules,
+        $hash->{build_root}->stringify,
+        @{$self->stub},
         '--',
-        @included_modules,
+        Inline::Module->new(ilsm => $self->ilsm)->included_modules,
     );
 }
 
