@@ -3,7 +3,7 @@ our $VERSION = '0.01';
 
 use Moose;
 extends 'Dist::Zilla::Plugin::MakeMaker::Awesome';
-with 'Dist::Zilla::Role::AfterBuild';
+with qw(Dist::Zilla::Role::AfterBuild Dist::Zilla::Role::FileGatherer);
 
 has module => (
     is => 'ro',
@@ -66,12 +66,16 @@ sub after_build {
     my ($self, $hash) = @_;
     require Inline::Module;
 
-    Inline::Module->handle_distdir(
+    my @files_added = Inline::Module->handle_distdir(
         $hash->{build_root}->stringify,
         @{$self->stub},
         '--',
         Inline::Module->new(ilsm => $self->ilsm)->included_modules,
     );
+
+    # the following will make sure that Dist::Zilla knows about the written
+    # files so that it can add them to the tarball.
+    $self->add_file( Dist::Zilla::File::OnDisk->new( name => $_ ) ) for @files_added;
 }
 
 1;
