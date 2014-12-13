@@ -1,5 +1,5 @@
 package Dist::Zilla::Plugin::InlineModule;
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 use Moose;
 extends 'Dist::Zilla::Plugin::MakeMaker::Awesome';

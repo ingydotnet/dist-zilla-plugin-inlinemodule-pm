@@ -1,4 +1,9 @@
 ---
+version: 0.02
+date:    Sat Dec 13 11:34:33 EST 2014
+changes:
+- Get this working correctly with latest Inline::Module
+---
 version: 0.01
 date:    Sat Nov 15 01:15:08 UTC 2014
 changes:
