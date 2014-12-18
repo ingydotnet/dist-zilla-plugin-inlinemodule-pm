@@ -1,5 +1,7 @@
 package Dist::Zilla::Plugin::InlineModule;
-our $VERSION = '0.02';
+our $VERSION = '0.03';
+
+use Inline::Module();
 
 use Moose;
 extends 'Dist::Zilla::Plugin::MakeMaker::Awesome';
@@ -34,7 +36,7 @@ sub _build_stub {
     return [ map "${_}::Inline", @{$self->module} ];
 }
 
-# Lets us pass the 'module' option more than once:
+# Lets us pass the options more than once:
 sub mvp_multivalue_args { qw(module stub ilsm) }
 
 # Add lines to use Inline::Module to Makefile.PL
@@ -53,6 +55,7 @@ around _build_WriteMakefile_args => sub {
     my $self = shift;
 
     my $make_args = $self->$orig(@_);
+    $self->{inline_meta} =
     $make_args->{postamble}{inline} = {
         module => $self->module,
         stub => $self->stub,
@@ -64,18 +67,19 @@ around _build_WriteMakefile_args => sub {
 
 sub after_build {
     my ($self, $hash) = @_;
-    require Inline::Module;
 
-    my @files_added = Inline::Module->handle_distdir(
+    my $meta = $self->{inline_meta};
+
+    my $files_added = Inline::Module->add_to_distdir(
         $hash->{build_root}->stringify,
-        @{$self->stub},
-        '--',
-        Inline::Module->new(ilsm => $self->ilsm)->included_modules,
+        $meta->{stub},
+        Inline::Module->included_modules($meta),
     );
 
-    # the following will make sure that Dist::Zilla knows about the written
+    # The following will make sure that Dist::Zilla knows about the written
     # files so that it can add them to the tarball.
-    $self->add_file( Dist::Zilla::File::OnDisk->new( name => $_ ) ) for @files_added;
+    $self->add_file( Dist::Zilla::File::OnDisk->new( name => $_ ) )
+        for @$files_added;
 }
 
 1;
