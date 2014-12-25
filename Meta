@@ -1,7 +1,7 @@
 =meta: 0.0.2
 
 name: Dist-Zilla-Plugin-InlineModule
-version: 0.03
+version: 0.04
 abstract: Dist::Zilla Plugin for Inline::Module
 homepage: https://metacpan.org/release/Dist-Zilla-Plugin-InlineModule
 language: perl
@@ -23,7 +23,7 @@ devel:
 
 requires:
   perl: 5.8.1
-  Dist::Zilla: 5.019
-  Dist::Zilla::Plugin::MakeMaker::Awesome: 0
-  Inline::Module: 0.21
-  Moose: 0
+  Dist::Zilla: 5.029
+  Dist::Zilla::Plugin::MakeMaker::Awesome: 0.32
+  Inline::Module: 0.30
+  Moose: 2.1005
