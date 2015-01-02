@@ -1,7 +1,7 @@
 =meta: 0.0.2
 
 name: Dist-Zilla-Plugin-InlineModule
-version: 0.06
+version: 0.07
 abstract: Dist::Zilla Plugin for Inline::Module
 homepage: https://metacpan.org/release/Dist-Zilla-Plugin-InlineModule
 language: perl
@@ -23,7 +23,7 @@ author:
 devel:
   git: https://github.com/ingydotnet/zilla-dist-pm
   bug: https://github.com/ingydotnet/zilla-dist-pm/issues
-  irc: irc.freenode.net#pkg
+  irc: irc.perl.org#inline
 
 requires:
   perl: 5.8.1

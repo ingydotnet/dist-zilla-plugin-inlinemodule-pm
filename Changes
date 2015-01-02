@@ -1,4 +1,9 @@
 ---
+version: 0.07
+date:    Fri Jan  2 09:35:17 PST 2015
+changes:
+- Change IRC channel to irc.perl.org#inline
+---
 version: 0.06
 date:    Fri Jan  2 09:29:15 PST 2015
 changes:
