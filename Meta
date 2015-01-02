@@ -1,7 +1,7 @@
 =meta: 0.0.2
 
 name: Dist-Zilla-Plugin-InlineModule
-version: 0.05
+version: 0.06
 abstract: Dist::Zilla Plugin for Inline::Module
 homepage: https://metacpan.org/release/Dist-Zilla-Plugin-InlineModule
 language: perl
@@ -9,14 +9,12 @@ license: perl
 copyright: 2014-2015
 
 author:
-  name: Ingy döt Net
+- name: Ingy döt Net
   email: ingy@cpan.org
   github: ingydotnet
   twitter: ingydotnet
   freenode: ingy
   homepage: http://ingy.net
-
-authors:
 - name: David Oswald
   email: davido@cpan.org
 - name: Karen Etheridge

@@ -1,5 +1,5 @@
 package Dist::Zilla::Plugin::InlineModule;
-our $VERSION = '0.05';
+our $VERSION = '0.06';
 
 use Inline::Module();
 
@@ -31,6 +31,11 @@ has ilsm => (
     default => sub { ['Inline::C'] },
 );
 
+has bundle => (
+    is => 'ro',
+    default => sub { 1 },
+);
+
 sub _build_stub {
     my ($self) = @_;
     return [ map "${_}::Inline", @{$self->module} ];
@@ -60,6 +65,7 @@ around _build_WriteMakefile_args => sub {
         module => $self->module,
         stub => $self->stub,
         ilsm => $self->ilsm,
+        bundle => $self->bundle,
     };
 
     return $make_args;

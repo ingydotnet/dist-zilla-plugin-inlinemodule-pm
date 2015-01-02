@@ -1,4 +1,9 @@
 ---
+version: 0.06
+date:    Fri Jan  2 09:29:15 PST 2015
+changes:
+- Add 'bundle' support
+---
 version: 0.05
 date:    Thu Jan  1 00:16:35 PST 2015
 changes:
